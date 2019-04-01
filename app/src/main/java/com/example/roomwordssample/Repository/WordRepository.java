@@ -33,7 +33,23 @@ public class WordRepository {
         new InsertAsyncTask(mWordDao).execute(word);
     }
 
-    // Inner class that performs Async task
+    // Delete all words
+    public void deleteAll()  {
+        new DeleteAllWordsAsyncTask(mWordDao).execute();
+    }
+
+    // Delete a single word record
+    public void deleteWord(Word word)  {
+        new DeleteWordAsyncTask(mWordDao).execute(word);
+    }
+
+    /**
+     * INNER CLASSES for AsyncTasks
+     * - InsertAsyncTask
+     * - DeleteAllWordsAsyncTask
+     * - DeleteWordAsyncTask
+     */
+    // Inner class that performs insert a word Async task
     private static class InsertAsyncTask extends AsyncTask<Word, Void, Void> {
         private WordDao mAsyncTaskDao;
 
@@ -45,6 +61,36 @@ public class WordRepository {
         @Override
         protected Void doInBackground(final Word... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    // Inner class that performs delete all words Async task
+    private static class DeleteAllWordsAsyncTask extends AsyncTask<Void, Void, Void> {
+        private WordDao mAsyncTaskDao;
+
+        DeleteAllWordsAsyncTask(WordDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
+
+    // Inner class that performs delete a single word Async task
+    private static class DeleteWordAsyncTask extends AsyncTask<Word, Void, Void> {
+        private WordDao mAsyncTaskDao;
+
+        DeleteWordAsyncTask(WordDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Word... params) {
+            mAsyncTaskDao.deleteWord(params[0]);
             return null;
         }
     }
